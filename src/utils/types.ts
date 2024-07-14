@@ -38,3 +38,8 @@ export type TUser = {
 };
 
 export type TTabMode = 'bun' | 'sauce' | 'main';
+
+export type TFieldType<T> = {
+  field: keyof T;
+  value: string;
+};
