@@ -10,10 +10,6 @@ interface TFeedState {
   error: string | null;
 }
 
-export const fetchFeedsThunk = createAsyncThunk('feed/getFeeds', async () =>
-  getFeedsApi()
-);
-
 const initialState: TFeedState = {
   orders: [],
   total: 0,
@@ -21,6 +17,8 @@ const initialState: TFeedState = {
   loading: false,
   error: null
 };
+
+export const fetchFeedsThunk = createAsyncThunk('feed/getFeeds', getFeedsApi);
 
 export const feedsSlice = createSlice({
   name: 'feed',

@@ -28,8 +28,9 @@ const initialState: TAuthState = {
   isLoading: false
 };
 
-export const tokenRefreshThunk = createAsyncThunk('token/refresh', async () =>
-  refreshToken()
+export const tokenRefreshThunk = createAsyncThunk(
+  'token/refresh',
+  refreshToken
 );
 
 export const loginThunk = createAsyncThunk(
@@ -37,18 +38,14 @@ export const loginThunk = createAsyncThunk(
   async (data: TLoginData) => loginUserApi(data)
 );
 
-export const logoutThunk = createAsyncThunk('auth/logout', async () =>
-  logoutApi()
-);
+export const logoutThunk = createAsyncThunk('auth/logout', logoutApi);
 
 export const registrationThunk = createAsyncThunk(
   'auth/register',
   async (data: TRegisterData) => registerUserApi(data)
 );
 
-export const fetchUserThunk = createAsyncThunk('user/get', async () =>
-  getUserApi()
-);
+export const fetchUserThunk = createAsyncThunk('user/get', getUserApi);
 
 export const updateUserThunk = createAsyncThunk(
   'user/update',

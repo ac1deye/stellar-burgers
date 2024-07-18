@@ -12,9 +12,7 @@ const initialState: TOrderHistoryState = {
   loading: false
 };
 
-export const fetchOrdersThunk = createAsyncThunk('orders/list', async () =>
-  getOrdersApi()
-);
+export const fetchOrdersThunk = createAsyncThunk('orders/list', getOrdersApi);
 
 export const orderHistorySlice = createSlice({
   name: 'orderHistory',
