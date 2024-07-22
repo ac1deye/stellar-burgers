@@ -6,7 +6,7 @@ type TConstructorState = {
   ingredients: TConstructorIngredient[];
 };
 
-const initialState: TConstructorState = {
+export const initialState: TConstructorState = {
   bun: null,
   ingredients: []
 };
@@ -24,7 +24,7 @@ export const constructorSlice = createSlice({
         }
       },
       prepare: (ingredient: TIngredient) => ({
-        payload: { id: crypto.randomUUID(), ...ingredient }
+        payload: { id: ingredient._id, ...ingredient }
       })
     },
     removeIngredient: (state, { payload }: PayloadAction<number>) => {

@@ -8,24 +8,24 @@ import {
   TLoginData,
   TRegisterData,
   refreshToken
-} from '@api';
+} from '../utils/burger-api';
 import { TUser } from '@utils-types';
 import { deleteCookie, getCookie, setCookie } from '../utils/cookie';
 
 type TAuthState = {
   error: string | undefined;
-  isLoading: boolean;
+  loading: boolean;
   isAuthorized: boolean;
   user: TUser | null;
 };
 
 const isAuth = getCookie('accessToken') !== undefined;
 
-const initialState: TAuthState = {
+export const initialState: TAuthState = {
   isAuthorized: isAuth,
   user: null,
   error: undefined,
-  isLoading: false
+  loading: false
 };
 
 export const tokenRefreshThunk = createAsyncThunk(
@@ -57,7 +57,7 @@ export const userSlice = createSlice({
   initialState,
   reducers: {},
   selectors: {
-    selectIsLoading: (state) => state.isLoading,
+    selectIsLoading: (state) => state.loading,
     selectError: (state) => state.error,
     selectIsAuthorized: (state) => state.isAuthorized,
     selectUser: (state) => state.user
@@ -66,16 +66,16 @@ export const userSlice = createSlice({
     builder
       .addCase(loginThunk.pending, (state) => {
         state.error = undefined;
-        state.isLoading = true;
+        state.loading = true;
       })
       .addCase(loginThunk.rejected, (state, action) => {
-        state.isLoading = false;
+        state.loading = false;
         state.error = action.error.message ?? undefined;
         state.isAuthorized = false;
         state.user = null;
       })
       .addCase(loginThunk.fulfilled, (state, action) => {
-        state.isLoading = false;
+        state.loading = false;
         state.isAuthorized = true;
         state.user = action.payload.user;
 
@@ -85,16 +85,16 @@ export const userSlice = createSlice({
       })
       .addCase(registrationThunk.pending, (state) => {
         state.error = undefined;
-        state.isLoading = true;
+        state.loading = true;
       })
       .addCase(registrationThunk.rejected, (state, action) => {
-        state.isLoading = false;
+        state.loading = false;
         state.error = action.error.message ?? undefined;
         state.isAuthorized = false;
         state.user = null;
       })
       .addCase(registrationThunk.fulfilled, (state, action) => {
-        state.isLoading = false;
+        state.loading = false;
         state.isAuthorized = true;
         state.user = action.payload.user;
 
@@ -103,7 +103,7 @@ export const userSlice = createSlice({
         setCookie('accessToken', action.payload.accessToken);
       })
       .addCase(fetchUserThunk.fulfilled, (state, action) => {
-        state.isLoading = false;
+        state.loading = false;
         state.isAuthorized = true;
         state.user = action.payload.user;
       })
@@ -115,15 +115,19 @@ export const userSlice = createSlice({
         state.isAuthorized = false;
       })
       .addCase(logoutThunk.rejected, (state) => {
+        state.user = null;
+        state.isAuthorized = false;
         localStorage.removeItem('refreshToken');
         deleteCookie('accessToken');
       })
       .addCase(logoutThunk.fulfilled, (state) => {
+        state.user = null;
+        state.isAuthorized = false;
         localStorage.removeItem('refreshToken');
         deleteCookie('accessToken');
       })
       .addCase(tokenRefreshThunk.rejected, (state, action) => {
-        state.isLoading = false;
+        state.loading = false;
         state.isAuthorized = false;
         state.user = null;
 
@@ -131,7 +135,7 @@ export const userSlice = createSlice({
         deleteCookie('accessToken');
       })
       .addCase(tokenRefreshThunk.fulfilled, (state, action) => {
-        state.isLoading = false;
+        state.loading = false;
         state.isAuthorized = true;
 
         localStorage.setItem('refreshToken', action.payload.refreshToken);
